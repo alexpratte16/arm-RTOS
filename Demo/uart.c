@@ -1,11 +1,11 @@
 #include <FreeRTOS.h>
 #include <task.h>
-
+#include "Drivers/mem.h"
 #include<stdint.h>
 
 enum
 {
-
+    GPIO_BASE = GPIO_BASE_ADDR; 
     // Controls actuation of pull up/down to ALL GPIO pins.
     GPPUD = (GPIO_BASE + 0x94),
  

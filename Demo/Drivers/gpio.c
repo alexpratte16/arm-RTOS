@@ -70,6 +70,7 @@
  **/
 
 #include "gpio.h"
+#include <stdint.h>
 
 typedef struct {
 	unsigned long	GPFSEL[6];	///< Function selection registers.
@@ -99,7 +100,7 @@ typedef struct {
 	//Ignoring the reserved and test bytes
 } BCM2835_GPIO_REGS;
 
-volatile BCM2835_GPIO_REGS * const pRegs = (BCM2835_GPIO_REGS *) (0x20200000);
+volatile BCM2835_GPIO_REGS * const pRegs = (BCM2835_GPIO_REGS *) GPIO_BASE_ADDR;
 
 
 void SetGpioFunction(unsigned int pinNum, unsigned int funcNum) {
@@ -190,7 +191,27 @@ void DisableGpioDetect(unsigned int pinNum, enum DETECT_TYPE type)
 		break;
 	}
 }
-
+static inline void delay(int32_t count)
+{
+		asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+						 : "=r"(count): [count]"0"(count) : "cc");
+}
+void uart_init()
+{
+	mmio_write(UART_BASE_ADDR + 0x30, 0x00000000);
+	mmio_write(GPIO_BASE_ADDR + 0x94, 0x00000000);
+	delay(150);
+	mmio_write(GPIO_BASE_ADDR + 0x98, (1 << 14) | (1 << 15));
+	delay(150);
+	mmio_write(GPIO_BASE_ADDR + 0x98, 0x00000000);
+	mmio_write(UART_BASE_ADDR + 0x44, 0x7FF);
+	mmio_write(UART_BASE_ADDR + 0x24, 1);
+	mmio_write(UART_BASE_ADDR + 0x28, 40);
+	mmio_write(UART_BASE_ADDR + 0x2C, (1 << 4) | (1 << 5) | (1 << 6));
+	mmio_write(UART_BASE_ADDR + 0x38, (1 << 1) | (1 << 4) | (1 << 5) | (1 << 6) |
+						       (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10));
+	mmio_write(UART_BASE_ADDR + 0x30, (1 << 0) | (1 << 8) | (1 << 9));
+}
 void ClearGpioInterrupt(unsigned int pinNum)
 {
 	unsigned long mask=(1<<(pinNum%32));
@@ -198,3 +219,18 @@ void ClearGpioInterrupt(unsigned int pinNum)
 
 	pRegs->GPEDS[offset]=mask;
 }
+static inline void mmio_write(uint32_t reg, uint32_t data)
+{
+		*(volatile uint32_t*)reg = data;
+}
+ 
+// Memory-Mapped I/O input
+static inline uint32_t mmio_read(uint32_t reg){
+ 	return *(volatile uint32_t*)reg;
+}
+
+uart_putc(unsigned char c){
+	// Wait for UART to become ready to transmit.
+ 	while ( mmio_read(UART_BASE_ADDR + 0x18) & (1 << 5) ) { }
+ 		mmio_write(UART_BASE_ADDR, c);
+}		 

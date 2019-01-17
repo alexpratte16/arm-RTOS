@@ -98,6 +98,9 @@ void task2(void *pParam) {
 
 static void keyPressedHandler( const char *pString ) {
     println(pString,WHITE_TEXT);
+    while(1){
+	uart_putc('d');	
+	}
 }
 
 void task3(void *pParam) {
@@ -108,7 +111,7 @@ void task3(void *pParam) {
     //     return;
     // }
 
-    if (!USPiInitialize ())
+   /* if (!USPiInitialize ())
 	{
 		println("Cannot initialize USPi", GREEN_TEXT);		
 
@@ -124,7 +127,8 @@ void task3(void *pParam) {
     USPiKeyboardRegisterKeyPressedHandler (keyPressedHandler);
 
     println("Type stuff...",GREEN_TEXT);
-
+*/
+    uart_init();
     while(1) {
         i++;
         vTaskDelay(1000);
