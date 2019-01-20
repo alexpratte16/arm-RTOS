@@ -11,6 +11,8 @@
 *.ilk
 *.map
 *.exp
+*.syms
+*.list
 
 # Precompiled Headers
 *.gch
@@ -35,6 +37,7 @@
 *.i*86
 *.x86_64
 *.hex
+*.img
 
 # Debug files
 *.dSYM/

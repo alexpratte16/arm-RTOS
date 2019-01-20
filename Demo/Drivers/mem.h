@@ -12,10 +12,12 @@ char *strncpy(char *dest, const char *src, size_t n);
 size_t strlen(const char *s);
 int rand();
 
+#define PI1
+
 #ifdef PI1
 #define GPIO_BASE_ADDR 0x20200000
 #define MAIL_ADDR 0x2000B880
-#define UART_BASE_ADDR = 0x20201000
+#define UART_BASE_ADDR 0x20201000
 
 #endif
 
