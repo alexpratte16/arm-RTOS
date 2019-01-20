@@ -107,7 +107,7 @@ void task3(void *pParam) {
     while(1) {
         i++;
         vTaskDelay(1000);
-        //println("Hello Screen\n", GREEN_TEXT);
+        println("Hello Screen\n", GREEN_TEXT);
     }
 }
 
