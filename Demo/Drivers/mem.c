@@ -25,8 +25,9 @@ void *memcpy2(void *dest, const void *src, size_t n){
 	just use a loop inline*/
     char *dp = dest;
     const char *sp = src;
-    while (n--)
+    while (n--){
         *dp++ = *sp++;
+    }
 	return dest;
 }
 
@@ -42,7 +43,7 @@ int memcmp(const void* s1, const void* s2, size_t n){
 
 char *strcpy(char *dest, const char* src){
     char *ret = dest;
-    while (*dest++ = *src++)
+    while ((*dest++ = *src++))
         ;
     return ret;
 }
@@ -52,7 +53,7 @@ char *strncpy(char *dest, const char *src, size_t n){
     do {
         if (!n--)
             return ret;
-    } while (*dest++ = *src++);
+    } while ((*dest++ = *src++));
     while (n--)
         *dest++ = 0;
     return ret;

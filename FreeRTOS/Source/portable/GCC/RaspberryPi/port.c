@@ -220,6 +220,8 @@ void vPortEndScheduler( void )
  */
 void vTickISR (unsigned int nIRQ, void *pParam)
 {
+	(void) nIRQ;
+	(void) pParam;
 	vTaskIncrementTick();
 
 	#if configUSE_PREEMPTION == 1
@@ -240,11 +242,16 @@ static void prvSetupTimerInterrupt( void )
 	/* Calculate the match value required for our wanted tick rate. */
 	ulCompareMatch = 1000000 / configTICK_RATE_HZ;
 
+
 	/* Protect against divide by zero.  Using an if() statement still results
 	in a warning - hence the #if. */
 	#if portPRESCALE_VALUE != 0
 	{
 		ulCompareMatch /= ( portPRESCALE_VALUE + 1 );
+	}
+	#else
+	{
+		(void) ulCompareMatch;
 	}
 	#endif
 

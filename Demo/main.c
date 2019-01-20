@@ -71,11 +71,12 @@
 #include "Drivers/irq.h"
 #include "Drivers/gpio.h"
 #include "Drivers/video.h"
-#include "uspi.h"
 
 #define ALIVE_LED 23
 
 void task1(void *pParam) {
+
+    (void) pParam;
 
 	int i = 0;
 	while(1) {
@@ -87,6 +88,8 @@ void task1(void *pParam) {
 
 void task2(void *pParam) {
 
+    (void) pParam;
+
 	int i = 0;
 	while(1) {
 		i++;
@@ -96,39 +99,11 @@ void task2(void *pParam) {
 	}
 }
 
-static void keyPressedHandler( const char *pString ) {
-    println(pString,WHITE_TEXT);
-    while(1){
-	uart_putc('d');	
-	}
-}
-
 void task3(void *pParam) {
     int i = 0;
 
-    // if (!USPiEnvInitialize()){
-    //     println("USPiEnvInitialize() error!");
-    //     return;
-    // }
+    (void) pParam;
 
-   /* if (!USPiInitialize ())
-	{
-		println("Cannot initialize USPi", GREEN_TEXT);		
-
-		return;
-	}
-
-    if (!USPiKeyboardAvailable ()) {
-        println("Keyboard not found!",GREEN_TEXT);
-
-        return;
-    }
-
-    USPiKeyboardRegisterKeyPressedHandler (keyPressedHandler);
-
-    println("Type stuff...",GREEN_TEXT);
-*/
-    uart_init();
     while(1) {
         i++;
         vTaskDelay(1000);
@@ -143,7 +118,7 @@ void task3(void *pParam) {
  *	-- Absolutely nothing wrong with this being called main(), just it doesn't have
  *	-- the same prototype as you'd see in a linux program.
  **/
-void main (void)
+int main (void)
 {
 	SetGpioFunction(ALIVE_LED, 1);			// RDY led
 
@@ -164,4 +139,6 @@ void main (void)
 	while(1) {
 		;
 	}
+
+    return 0;
 }

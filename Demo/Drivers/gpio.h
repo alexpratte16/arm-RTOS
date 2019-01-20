@@ -112,8 +112,6 @@ int PudGpio				(unsigned int pinNum, enum PULL_STATE state);
 void EnableGpioDetect	(unsigned int pinNum, enum DETECT_TYPE type);
 void DisableGpioDetect	(unsigned int pinNum, enum DETECT_TYPE type);
 void ClearGpioInterrupt	(unsigned int pinNum);
-static inline void mmio_write(uint32_t reg, uint32_t data);
-static inline uint32_t mmio_read(uint32_t reg);
 void uart_putc(unsigned char c);
 void uart_init();
 #endif

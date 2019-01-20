@@ -72,6 +72,10 @@
 #include "gpio.h"
 #include <stdint.h>
 
+
+static inline void mmio_write(uint32_t reg, uint32_t data);
+static inline uint32_t mmio_read(uint32_t reg);
+
 typedef struct {
 	unsigned long	GPFSEL[6];	///< Function selection registers.
 	unsigned long	Reserved_1;
@@ -229,7 +233,7 @@ static inline uint32_t mmio_read(uint32_t reg){
  	return *(volatile uint32_t*)reg;
 }
 
-uart_putc(unsigned char c){
+void uart_putc(unsigned char c){
 	// Wait for UART to become ready to transmit.
  	while ( mmio_read(UART_BASE_ADDR + 0x18) & (1 << 5) ) { }
  		mmio_write(UART_BASE_ADDR, c);
